@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Documentation</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* CSS Variables for Light & Dark Modes */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --container-bg: #fff;
+      --sidebar-bg: #f4f4f4;
+      --sidebar-text: #1b1b1b;
+      --link-hover: #737373;
+      /* Code block colors for light mode */
+      --code-bg: #2d2d2d;
+      --code-text: #ccc;
+      --copy-btn-bg: #2980b9;
+      --copy-btn-hover: #1f6391;
+    }
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #e0e0e0;
+      --container-bg: #1e1e1e;
+      --sidebar-bg: #1b1b1b;
+      --sidebar-text: #f4f4f4;
+      --link-hover: #bbb;
+      /* Code block colors for dark mode */
+      --code-bg: #1e1e1e;
+      --code-text: #dcdcdc;
+      --copy-btn-bg: #0066cc;
+      --copy-btn-hover: #0057b8;
+    }
+    /* Base Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+    /* Wrapper and sidebar styles */
+    #wrapper {
+      padding-left: 250px;
+      transition: all 0.3s ease;
+    }
+    #wrapper.toggled {
+      padding-left: 0;
+    }
+    #sidebar-wrapper {
+      position: fixed;
+      left: 250px;
+      width: 250px;
+      height: 100%;
+      margin-left: -250px;
+      background: var(--sidebar-bg);
+      overflow-y: auto;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 9px rgba(0,0,0,0.05);
+    }
+    #wrapper.toggled #sidebar-wrapper {
+      left: 0;
+    }
+    #page-content-wrapper {
+      width: 100%;
+      padding: 20px;
+    }
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar-nav li {
+      text-indent: 20px;
+      line-height: 40px;
+    }
+    .sidebar-nav li a {
+      color: var(--sidebar-text);
+      display: block;
+      text-decoration: none;
+    }
+    .sidebar-nav li a:hover {
+      color: var(--link-hover);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .sidebar-brand {
+      font-size: 1.5em;
+      padding: 10px 20px;
+      text-align: center;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    /* Content container */
+    .container-custom {
+      max-width: 960px;
+      margin: 30px auto;
+      background: var(--container-bg);
+      padding: 20px 40px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text-color);
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    code {
+        background: var(--container-bg);
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 90%;
+    }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 5px;
+      position: relative;
+      margin-bottom: 20px;
+      font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    }
+    .code-block {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--copy-btn-bg);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+    .copy-btn:hover {
+      background: var(--copy-btn-hover);
+    }
+    /* Toggle icon buttons */
+    .toggle-mode, #menu-toggle {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-color);
+      cursor: pointer;
+      outline: none;
+    }
+    .toggle-mode:hover, #menu-toggle:hover {
+      color: var(--link-hover);
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    /* Extra spacing for fixed sidebar */
+    body { padding-top: 20px; }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+          <a href="#">
+            <img src="logo.png" alt="Logo" style="height:100px; margin-right:10px;">
+          </a>
+        </li>
+        <li><a href="#superadmin-endpoints">Superadmin</a></li>
+        <li><a href="#employee-module-endpoints">Employee Module</a></li>
+        <li><a href="#branch-management-endpoints">Branch Management</a></li>
+        <li><a href="#kiosk-module-endpoints">Kiosk Module</a></li>
+        <li><a href="#signages-module-endpoint">Signages Module</a></li>
+      </ul>
+    </div>
+      <!-- /#sidebar-wrapper -->
+
+  <!-- Main Content Container -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <!-- Menu Toggle Icon (hamburger) -->
+      <button id="menu-toggle" class="btn btn-default"><i class="fa fa-bars"></i></button>
+      <!-- Dark Mode Toggle Icon -->
+      <button id="toggleDarkMode" class="toggle-mode"><i class="fa fa-moon-o"></i></button>
+      <h1>API Documentation</h1>
+      <p>This document details the available API endpoints for performing CRUD operations and custom actions across different modules. All endpoints require a valid bearer token passed in the <code>Authorization</code> header. For JSON payloads, include <code>Content-Type: application/json</code> (or use multipart/form-data for file uploads).</p>
+    
+    <!-- 1. Superadmin Endpoints -->
+    <section id="superadmin-endpoints" class="section">
+      <h2>1. Superadmin Endpoints</h2>
+      
+      <!-- 1.1 Company -->
+      <h3>1.1 Company</h3>
+      <h4>(a) List Companies (<code>getMyCompanies</code>)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/companies/getMyCompanies/</code><br>
+         <strong>Description:</strong> Retrieves a list of companies.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/companies/getMyCompanies/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) List Simple Companies (<code>getMySimpleCompanies</code>)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/companies/getMySimpleCompanies/</code><br>
+         <strong>Description:</strong> Retrieves a simplified list of companies.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/companies/getMySimpleCompanies/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Create (Add) a Company</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/companies/</code><br>
+         <strong>Description:</strong> Creates a new company. <em>Ensure the referenced client and category exist.</em></p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "category_id": 1,
+  "name": "Test Company",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/companies/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "category_id": 1,
+        "name": "Test Company",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(d) Delete a Company</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/companies/{id}/</code><br>
+         <strong>Description:</strong> Deletes a company by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/companies/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Restore a Company (Custom Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/companies/{id}/restore/</code><br>
+         <strong>Description:</strong> Restores a previously deleted company.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/companies/1/restore/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(f) “Connect” Company (Custom Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/companies/connect/</code><br>
+         <strong>Description:</strong> Connects a company using additional parameters.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "company_id": 1,
+  "other_param": "value"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/companies/connect/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{ "company_id": 1, "other_param": "value" }'</code></pre>
+      </div>
+      
+      <!-- 1.2 Branch -->
+      <h3>1.2 Branch</h3>
+      <h4>(a) List Branches (<code>getMyBranches</code>)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/branches/getMyBranches/</code><br>
+         <strong>Description:</strong> Retrieves a list of branches.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/branches/getMyBranches/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) List Simple Branches (<code>getMySimpleBranches</code>)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/branches/getMySimpleBranches/</code><br>
+         <strong>Description:</strong> Retrieves a simplified list of branches.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/branches/getMySimpleBranches/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Create (Add) a Branch</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/branches/</code><br>
+         <strong>Description:</strong> Creates a new branch.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "name": "Main Branch",
+  "description": "Main branch description",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/branches/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "name": "Main Branch",
+        "description": "Main branch description",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(d) Get Branches by Company ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/branches/getMyBranchesByCompanyId/?company_id=1</code><br>
+         <strong>Description:</strong> Retrieves branches for a specific company.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/branches/getMyBranchesByCompanyId/?company_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Delete a Branch</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/branches/{id}/</code><br>
+         <strong>Description:</strong> Deletes a branch by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/branches/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(f) Restore a Branch</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/branches/{id}/restore/</code><br>
+         <strong>Description:</strong> Restores a previously deleted branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/branches/1/restore/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.3 Department -->
+      <h3>1.3 Department</h3>
+      <h4>(a) List Departments (<code>getMyDepartments</code>)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/departments/getMyDepartments/</code><br>
+         <strong>Description:</strong> Retrieves a list of departments.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/departments/getMyDepartments/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Create (Add) a Department</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/departments/</code><br>
+         <strong>Description:</strong> Creates a new department.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "branch_id": 1,
+  "name": "Maintenance",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/departments/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "branch_id": 1,
+        "name": "Maintenance",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(c) Get Departments by Branch ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/departments/getMyDepartmentsByBranchId/?branch_id=1</code><br>
+         <strong>Description:</strong> Retrieves departments for a specific branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/departments/getMyDepartmentsByBranchId/?branch_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Delete a Department</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/departments/{id}/</code><br>
+         <strong>Description:</strong> Deletes a department by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/departments/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Restore a Department</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/departments/{id}/restore/</code><br>
+         <strong>Description:</strong> Restores a previously deleted department.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/departments/1/restore/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.4 Service -->
+      <h3>1.4 Service</h3>
+      <h4>(a) Create (Add) a Service</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/services/</code><br>
+         <strong>Description:</strong> Creates a new service.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "branch_id": 1,
+  "department_id": 1,
+  "name": "Prepaid",
+  "prefix": "P",
+  "limit": 0,
+  "start": 1,
+  "end": 999,
+  "display_priority": 1,
+  "prebooking_status": 1,
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/services/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "branch_id": 1,
+        "department_id": 1,
+        "name": "Prepaid",
+        "prefix": "P",
+        "limit": 0,
+        "start": 1,
+        "end": 999,
+        "display_priority": 1,
+        "prebooking_status": 1,
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(b) Get Service Details</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/services/{id}/</code><br>
+         <strong>Description:</strong> Retrieves details of a specific service.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/services/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Get Services by Branch ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/services/getServiceByBranchId/?branch_id=1</code><br>
+         <strong>Description:</strong> Retrieves services associated with a specific branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/services/getServiceByBranchId/?branch_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) (Machine) Get Services by Branch ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/services/machine/getServiceByBranchId/?branch_id=1</code><br>
+         <strong>Description:</strong> Retrieves services for machine-based operations.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/services/machine/getServiceByBranchId/?branch_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Update a Service</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/services/{id}/</code><br>
+         <strong>Description:</strong> Updates details of a service.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "name": "Updated Service Name"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/services/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Updated Service Name"}'</code></pre>
+      </div>
+      
+      <h4>(f) Delete a Service</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/services/{id}/</code><br>
+         <strong>Description:</strong> Deletes a service by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/services/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(g) Restore a Service</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/services/{id}/restore/</code><br>
+         <strong>Description:</strong> Restores a previously deleted service.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/services/1/restore/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.5 Service Schedule -->
+      <h3>1.5 Service Schedule</h3>
+      <h4>(a) Get Service Schedule</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/service_schedules/getServiceSchedule/?branch_id=1&amp;service_id=1&amp;date=2023-01-01</code><br>
+         <strong>Description:</strong> Retrieves the service schedule for a given branch, service, and date.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/service_schedules/getServiceSchedule/?branch_id=1&amp;service_id=1&amp;date=2023-01-01" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Add a Service Schedule</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/service_schedules/</code><br>
+         <strong>Description:</strong> Creates a new service schedule.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "branch_id": 1,
+  "service_id": 1,
+  "slot_interval": "45",
+  "currency": "EGP",
+  "price": 200,
+  "start": "09:00:00",
+  "end": "17:00:00",
+  "day": "Monday",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/service_schedules/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "branch_id": 1,
+        "service_id": 1,
+        "slot_interval": "45",
+        "currency": "EGP",
+        "price": 200,
+        "start": "09:00:00",
+        "end": "17:00:00",
+        "day": "Monday",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(c) Update a Service Schedule</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/service_schedules/{id}/</code><br>
+         <strong>Description:</strong> Updates a service schedule.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "price": 250
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/service_schedules/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"price": 250}'</code></pre>
+      </div>
+      
+      <h4>(d) Delete a Service Schedule</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/service_schedules/{id}/</code><br>
+         <strong>Description:</strong> Deletes a service schedule by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/service_schedules/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.6 Employee (Superadmin Actions) -->
+      <h3>1.6 Employee (Superadmin Actions)</h3>
+      <h4>(a) Add an Employee</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/employee/addEmployee/</code><br>
+         <strong>Description:</strong> Adds a new employee.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "phone": "0123456789",
+  "password": "secret123",
+  "role_id": 5,
+  "company_id": 1,
+  "branch_id": 1,
+  "service_id": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/employee/addEmployee/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "John Doe",
+        "email": "johndoe@example.com",
+        "phone": "0123456789",
+        "password": "secret123",
+        "role_id": 5,
+        "company_id": 1,
+        "branch_id": 1,
+        "service_id": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(b) Get Employee Services</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/employee/getEmployeeServices/?employee_id=1</code><br>
+         <strong>Description:</strong> Retrieves services for a specified employee.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/employee/getEmployeeServices/?employee_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Delete an Employee</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/employee/deleteEmployee/{id}/</code><br>
+         <strong>Description:</strong> Deletes an employee by their ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/employee/deleteEmployee/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Add Employee Services</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/employee/addEmployeeServices/</code><br>
+         <strong>Description:</strong> Assigns services to an employee.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "employee_id": 1,
+  "service_id": 2,
+  "priority": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/employee/addEmployeeServices/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"employee_id": 1, "service_id": 2, "priority": 1}'</code></pre>
+      </div>
+      
+      <h4>(e) List Employees</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/employee/getEmployees/</code><br>
+         <strong>Description:</strong> Retrieves a list of employees.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/employee/getEmployees/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.7 Windows -->
+      <h3>1.7 Windows</h3>
+      <h4>(a) Add a Window</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/windows/</code><br>
+         <strong>Description:</strong> Adds a new window.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "branch_id": 1,
+  "department_id": 1,
+  "employee_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "window_name": "Front Desk",
+  "title": "Welcome",
+  "window_number": "W1",
+  "employee_name": "Jane Smith",
+  "description": "Main reception window",
+  "sound_language": 1,
+  "client_prefix": 1,
+  "window_prefix": 1,
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/windows/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "branch_id": 1,
+        "department_id": 1,
+        "employee_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "window_name": "Front Desk",
+        "title": "Welcome",
+        "window_number": "W1",
+        "employee_name": "Jane Smith",
+        "description": "Main reception window",
+        "sound_language": 1,
+        "client_prefix": 1,
+        "window_prefix": 1,
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(b) Get a Window (Detail)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/windows/{id}/</code><br>
+         <strong>Description:</strong> Retrieves details for a specific window.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/windows/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Get Windows by Service ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/windows/getWindowsByServiceId/?service_id=1</code><br>
+         <strong>Description:</strong> Retrieves windows for a specific service.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/windows/getWindowsByServiceId/?service_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Update a Window</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/windows/{id}/</code><br>
+         <strong>Description:</strong> Updates a window’s details.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "title": "Updated Title"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/windows/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Updated Title"}'</code></pre>
+      </div>
+      
+      <h4>(e) Delete a Window</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/windows/{id}/</code><br>
+         <strong>Description:</strong> Deletes a window by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/windows/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.8 Kiosk -->
+      <h3>1.8 Kiosk</h3>
+      <h4>(a) Add a Kiosk</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/</code><br>
+         <strong>Description:</strong> Adds a new kiosk.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "branch_id": 1,
+  "department_id": "Sales",
+  "kiosk_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "image": "logo.png",
+  "message": "Welcome to the kiosk",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_kiosks/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "branch_id": 1,
+        "department_id": "Sales",
+        "kiosk_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "image": "logo.png",
+        "message": "Welcome to the kiosk",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(b) Get My Kiosk</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/getMyKiosk/</code><br>
+         <strong>Description:</strong> Retrieves the kiosk for the current client.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_kiosks/getMyKiosk/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Update a Kiosk (Custom Action “updateKiosk”)</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/{id}/updateKiosk/</code><br>
+         <strong>Description:</strong> Updates kiosk details.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "message": "Updated kiosk message"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/client_kiosks/1/updateKiosk/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Updated kiosk message"}'</code></pre>
+      </div>
+      
+      <h4>(d) Delete a Kiosk</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/{id}/</code><br>
+         <strong>Description:</strong> Deletes a kiosk by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/client_kiosks/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.9 Signage -->
+      <h3>1.9 Signage</h3>
+      <h4>(a) Add a Signage</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_signages/</code><br>
+         <strong>Description:</strong> Adds a new signage.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "company_id": 1,
+  "branch_id": 1,
+  "department_id": "Marketing",
+  "signage_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "media": "{\"type\":\"1\",\"images\":\"\",\"videos\":\"\"}",
+  "logo": "logo.png",
+  "pop_up_dialog": "pop_up_logo.png",
+  "settings": "{\"main_color\":\"#ffb23939\",\"signage_title\":\"Queue Best\",\"top_bar_text\":\"...\"}",
+  "status": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_signages/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "client_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "company_id": 1,
+        "branch_id": 1,
+        "department_id": "Marketing",
+        "signage_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+        "media": "{\"type\":\"1\",\"images\":\"\",\"videos\":\"\"}",
+        "logo": "logo.png",
+        "pop_up_dialog": "pop_up_logo.png",
+        "settings": "{\"main_color\":\"#ffb23939\",\"signage_title\":\"Queue Best\",\"top_bar_text\":\"...\"}",
+        "status": 1
+      }'</code></pre>
+      </div>
+      
+      <h4>(b) Get Signages</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_signages/</code><br>
+         <strong>Description:</strong> Retrieves a list of signages.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_signages/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Get Online Signages (Custom Action)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_signages/getOnlineSignages/</code><br>
+         <strong>Description:</strong> Retrieves signages that are currently online.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_signages/getOnlineSignages/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Update a Signage</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/client_signages/{id}/</code><br>
+         <strong>Description:</strong> Updates signage details.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "logo": "new_logo.png"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/client_signages/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"logo": "new_logo.png"}'</code></pre>
+      </div>
+      
+      <h4>(e) Delete a Signage</h4>
+      <p><strong>Method:</strong> DELETE<br>
+         <strong>URL:</strong> <code>/api/client_signages/{id}/</code><br>
+         <strong>Description:</strong> Deletes a signage by its ID.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X DELETE "http://127.0.0.1:8000/api/client_signages/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(f) Restore a Signage</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_signages/{id}/restore/</code><br>
+         <strong>Description:</strong> Restores a previously deleted signage.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_signages/1/restore/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 1.10 Reports -->
+      <h3>1.10 Reports</h3>
+      <h4>(a) Get Filters for Reports</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/reports/getFilters/</code><br>
+         <strong>Description:</strong> Retrieves available filters for report generation.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/reports/getFilters/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get Reports</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/reports/getReports/?branch_id=1&amp;from_date=2023-01-01&amp;to_date=2023-01-31</code><br>
+         <strong>Description:</strong> Retrieves reports for a specific branch and date range.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/reports/getReports/?branch_id=1&amp;from_date=2023-01-01&amp;to_date=2023-01-31" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+    </section>
+    
+    <!-- 2. Employee Module Endpoints -->
+    <section id="employee-module-endpoints" class="section">
+      <h2>2. Employee Module Endpoints</h2>
+      
+      <!-- 2.1 Turn Management -->
+      <h3>2.1 Turn Management</h3>
+      <h4>(a) Add a Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/addTurn/</code><br>
+         <strong>Description:</strong> Adds a new turn.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "service_id": 1,
+  "printer_id": 1005
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/addTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"service_id": 1, "printer_id": 1005}'</code></pre>
+      </div>
+      
+      <h4>(b) Add SMS Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/addSmsTurn/</code><br>
+         <strong>Description:</strong> Adds a turn via SMS.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "service_id": 1,
+  "phone": "0123456789"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/addSmsTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"service_id": 1, "phone": "0123456789"}'</code></pre>
+      </div>
+      
+      <h4>(c) Next Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/nextTurn/</code><br>
+         <strong>Description:</strong> Advances to the next turn.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/nextTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Hold Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/hold/</code><br>
+         <strong>Description:</strong> Puts a turn on hold.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/hold/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Recall Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/recallTurn/</code><br>
+         <strong>Description:</strong> Recalls a turn.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/recallTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(f) Jump Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/jumpTurn/</code><br>
+         <strong>Description:</strong> Jumps to a specified turn.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "jump_id": 129,
+  "window_number": "12"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/jumpTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"jump_id": 129, "window_number": "12"}'</code></pre>
+      </div>
+      
+      <h4>(g) Finish Reservation</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/finishReservation/</code><br>
+         <strong>Description:</strong> Completes a reservation.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/finishReservation/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(h) Get My Active Reservation</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/turn/getMyActiveReservation/</code><br>
+         <strong>Description:</strong> Retrieves the current active reservation.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/turn/getMyActiveReservation/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(i) Transfer Turn</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/transferTurn/</code><br>
+         <strong>Description:</strong> Transfers a turn to a different service/employee.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "reservation_id": 316,
+  "to_service_id": 3,
+  "to_employee_id": 2
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/transferTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"reservation_id": 316, "to_service_id": 3, "to_employee_id": 2}'</code></pre>
+      </div>
+      
+      <h4>(j) Next Turn by Service ID</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/turn/NextTurnByServiceId/</code><br>
+         <strong>Description:</strong> Advances to the next turn for a specific service.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "service_id": 1,
+  "employee_id": 3
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/turn/NextTurnByServiceId/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"service_id": 1, "employee_id": 3}'</code></pre>
+      </div>
+      
+      <!-- 2.2 Messages -->
+      <h3>2.2 Messages</h3>
+      <h4>(a) Check New Messages</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/messages/checkNewMessages/</code><br>
+         <strong>Description:</strong> Checks for any new messages.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/messages/checkNewMessages/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get My Threads</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/messages/getMyThreads/</code><br>
+         <strong>Description:</strong> Retrieves messaging threads for the current user.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/messages/getMyThreads/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Get Users to Message</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/messages/getUsersToMessage/</code><br>
+         <strong>Description:</strong> Retrieves a list of users available for messaging.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/messages/getUsersToMessage/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Show a Thread</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/messages/showThread/?thread_id=10</code><br>
+         <strong>Description:</strong> Retrieves the details of a specific message thread.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/messages/showThread/?thread_id=10" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(e) Send Message to a Single Receiver</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/messages/sendMessageToSingleReceiver/</code><br>
+         <strong>Description:</strong> Sends a message to a single recipient.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "receiver_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9",
+  "message": "Hello!"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/messages/sendMessageToSingleReceiver/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"receiver_id": "9d781e16-5b59-4fca-8e7b-799282c8c3e9", "message": "Hello!"}'</code></pre>
+      </div>
+    </section>
+    
+    <!-- 3. Branch Management Endpoints -->
+    <section id="branch-management-endpoints" class="section">
+      <h2>3. Branch Management Endpoints</h2>
+      
+      <!-- 3.1 Departments (Branch Manager) -->
+      <h3>3.1 Departments (Branch Manager)</h3>
+      <h4>(a) Get My Branch Departments</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/departments/getMyBranchDepartments/</code><br>
+         <strong>Description:</strong> Retrieves the departments for the branch managed by the current user.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/departments/getMyBranchDepartments/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 3.2 Services -->
+      <h3>3.2 Services</h3>
+      <h4>(a) Get My Branch Services</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/services/getMyBranchServices/</code><br>
+         <strong>Description:</strong> Retrieves the services available for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/services/getMyBranchServices/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Update Service Schedule (Example)</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/service_schedules/{id}/</code><br>
+         <strong>Description:</strong> Updates a service schedule.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "price": 300
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/service_schedules/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"price": 300}'</code></pre>
+      </div>
+      
+      <h4>(c) Update Service</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/services/{id}/</code><br>
+         <strong>Description:</strong> Updates service details for the branch.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "name": "Updated Service for Branch"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/services/1/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Updated Service for Branch"}'</code></pre>
+      </div>
+      
+      <!-- 3.3 Kiosk (Branch Manager) -->
+      <h3>3.3 Kiosk (Branch Manager)</h3>
+      <h4>(a) Update Kiosk (Custom Action)</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/{id}/updateKiosk/</code><br>
+         <strong>Description:</strong> Updates kiosk details for the branch.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "message": "Updated branch kiosk message"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/client_kiosks/1/updateKiosk/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Updated branch kiosk message"}'</code></pre>
+      </div>
+      
+      <h4>(b) Get My Branch Kiosk</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_kiosks/getMyBranchKiosk/</code><br>
+         <strong>Description:</strong> Retrieves the kiosk for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_kiosks/getMyBranchKiosk/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 3.4 Employee (Branch Manager) -->
+      <h3>3.4 Employee (Branch Manager)</h3>
+      <h4>(a) Get My Branch Employees</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/employee/getMyBranchemployees/</code><br>
+         <strong>Description:</strong> Retrieves employees for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/employee/getMyBranchemployees/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Add Employee Services (Branch Manager Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/employee_services/addEmployeeServices/</code><br>
+         <strong>Description:</strong> Assigns services to an employee.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "employee_id": 1,
+  "service_id": 2,
+  "priority": 1
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/employee_services/addEmployeeServices/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"employee_id": 1, "service_id": 2, "priority": 1}'</code></pre>
+      </div>
+      
+      <h4>(c) Assign MAC to Employee (Custom Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/employee_services/assignMacToEmployee/</code><br>
+         <strong>Description:</strong> Assigns a MAC address to an employee.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "employee_id": 1,
+  "mac_id": 5
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/employee_services/assignMacToEmployee/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"employee_id": 1, "mac_id": 5}'</code></pre>
+      </div>
+      
+      <h4>(d) Sync Permissions (Custom Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/employee/syncPermissions/</code><br>
+         <strong>Description:</strong> Synchronizes permissions for the employee.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/employee/syncPermissions/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 3.5 Windows (Branch Manager) -->
+      <h3>3.5 Windows (Branch Manager)</h3>
+      <h4>(a) Get My Branch Windows</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/windows/getMyBranchWindows/</code><br>
+         <strong>Description:</strong> Retrieves windows for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/windows/getMyBranchWindows/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get Branch Screens’ MAC Addresses</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/windows/getMyBranchScreensMac/</code><br>
+         <strong>Description:</strong> Retrieves MAC addresses for screens in the branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/windows/getMyBranchScreensMac/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 3.6 Reports (Branch Manager) -->
+      <h3>3.6 Reports (Branch Manager)</h3>
+      <h4>(a) Get Reports by Branch ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/reports/getReportsByBranchId/?branch_id=1</code><br>
+         <strong>Description:</strong> Retrieves reports for a specific branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/reports/getReportsByBranchId/?branch_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get Reports by Reservation ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/reports/getReportsByReservationId/?reservation_id=10</code><br>
+         <strong>Description:</strong> Retrieves reports for a specific reservation.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/reports/getReportsByReservationId/?reservation_id=10" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- 3.7 Signage (Branch Manager) -->
+      <h3>3.7 Signage (Branch Manager)</h3>
+      <h4>(a) Get Signages</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_signages/getSignages/</code><br>
+         <strong>Description:</strong> Retrieves signages for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_signages/getSignages/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Upload Logo (Custom Action)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_signages/uploadLogo/</code><br>
+         <strong>Description:</strong> Uploads a logo for a signage. (Use multipart form-data)</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_signages/uploadLogo/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -F "logo=@/path/to/logo.png" \
+  -F "signage_id=1"</code></pre>
+      </div>
+      
+      <h4>(c) Get a Signage (Custom Action)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_signages/{id}/getSignage/</code><br>
+         <strong>Description:</strong> Retrieves a specific signage’s details.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_signages/1/getSignage/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Upload Pop-Up Dialog Image</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_signages/uploadPopUpDialog/</code><br>
+         <strong>Description:</strong> Uploads a pop-up dialog image for a signage. (Use multipart form-data)</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_signages/uploadPopUpDialog/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -F "pop_up_dialog=@/path/to/popup.png" \
+  -F "signage_id=1"</code></pre>
+      </div>
+      
+      <h4>(e) Update Signage Settings</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/client_signages/{id}/updateSignageSettings/</code><br>
+         <strong>Description:</strong> Updates the settings for a signage.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "settings": "{\"main_color\":\"#123456\",\"signage_title\":\"New Title\"}"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/client_signages/1/updateSignageSettings/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"settings": "{\"main_color\":\"#123456\",\"signage_title\":\"New Title\"}"}'</code></pre>
+      </div>
+      
+      <h4>(f) Add Media to Signage</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_signages/addMediaToSignage/</code><br>
+         <strong>Description:</strong> Adds media to a signage.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "signage_id": 1,
+  "type": 1,
+  "images": "img1.png,img2.png"
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_signages/addMediaToSignage/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"signage_id": 1, "type": 1, "images": "img1.png,img2.png"}'</code></pre>
+      </div>
+      
+      <!-- 3.8 Q Player (Branch Manager) -->
+      <h3>3.8 Q Player (Branch Manager)</h3>
+      <h4>(a) Add Bulk Q Player</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/client_q_players/addBulkQPlayer/</code><br>
+         <strong>Description:</strong> Adds multiple Q players in bulk.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>[
+  {
+    "qplayer_id": "uuid1",
+    "window_number": "W1",
+    "text_size": 12
+  },
+  {
+    "qplayer_id": "uuid2",
+    "window_number": "W2",
+    "text_size": 14
+  }
+]</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/client_q_players/addBulkQPlayer/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '[{"qplayer_id": "uuid1", "window_number": "W1", "text_size": 12}, {"qplayer_id": "uuid2", "window_number": "W2", "text_size": 14}]'</code></pre>
+      </div>
+      
+      <h4>(b) Update a Q Player</h4>
+      <p><strong>Method:</strong> PATCH<br>
+         <strong>URL:</strong> <code>/api/client_q_players/{id}/updateQPlayer/</code><br>
+         <strong>Description:</strong> Updates a Q player's details.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "text_size": 16
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X PATCH "http://127.0.0.1:8000/api/client_q_players/1/updateQPlayer/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"text_size": 16}'</code></pre>
+      </div>
+      
+      <h4>(c) Get Q Player Data</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_q_players/getQplayerData/</code><br>
+         <strong>Description:</strong> Retrieves Q player data.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_q_players/getQplayerData/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Get C Player Data</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/client_q_players/getCplayerData/</code><br>
+         <strong>Description:</strong> Retrieves C player data.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/client_q_players/getCplayerData/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <!-- Extra Branch Manager Endpoints -->
+      <h3>Extra Branch Manager Endpoints</h3>
+      <h4>(a) Get My Branch Data</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/branch_manager/getMyBranchData/</code><br>
+         <strong>Description:</strong> Retrieves detailed data for the current branch.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/branch_manager/getMyBranchData/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get Reports for Headquarters</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/branch_manager/getReportsForHeadquarters/</code><br>
+         <strong>Description:</strong> Retrieves reports for headquarters.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/branch_manager/getReportsForHeadquarters/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Sync Reports</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/branch_manager/syncReports/</code><br>
+         <strong>Description:</strong> Synchronizes reports data.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/branch_manager/syncReports/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(d) Add an Employee (Branch Manager)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/branch_manager/addEmployee/</code><br>
+         <strong>Description:</strong> Adds a new employee under branch management.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "name": "Alice Branch",
+  "email": "alice@example.com",
+  "phone": "0987654321",
+  "password": "pass123",
+  "role_id": 5
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/branch_manager/addEmployee/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Alice Branch", "email": "alice@example.com", "phone": "0987654321", "password": "pass123", "role_id": 5}'</code></pre>
+      </div>
+    </section>
+    
+    <!-- 4. Kiosk Module Endpoints -->
+    <section id="kiosk-module-endpoints" class="section">
+      <h2>4. Kiosk Module Endpoints</h2>
+      <h4>(a) Get Departments (for Kiosk)</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/kiosk/getDepartments/</code><br>
+         <strong>Description:</strong> Retrieves available departments for kiosk operations.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/kiosk/getDepartments/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(b) Get Services by Department ID</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/kiosk/getServicesByDepartmentId/?department_id=1</code><br>
+         <strong>Description:</strong> Retrieves services associated with a given department.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/kiosk/getServicesByDepartmentId/?department_id=1" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+      
+      <h4>(c) Add Turn (Kiosk)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/kiosk/addTurn/</code><br>
+         <strong>Description:</strong> Adds a turn via the kiosk.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "service_id": 1,
+  "printer_id": 1005
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/kiosk/addTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"service_id": 1, "printer_id": 1005}'</code></pre>
+      </div>
+      
+      <h4>(d) Add Booking Turn (Kiosk)</h4>
+      <p><strong>Method:</strong> POST<br>
+         <strong>URL:</strong> <code>/api/kiosk/addBookingTurn/</code><br>
+         <strong>Description:</strong> Adds a booking turn via the kiosk.</p>
+      <p><strong>Payload Example:</strong></p>
+      <pre><code>{
+  "service_id": 1,
+  "booking_details": {
+    "name": "Customer A",
+    "phone": "0123456789"
+  }
+}</code></pre>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X POST "http://127.0.0.1:8000/api/kiosk/addBookingTurn/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"service_id": 1, "booking_details": {"name": "Customer A", "phone": "0123456789"}}'</code></pre>
+      </div>
+    </section>
+    
+    <!-- 5. Signages Module Endpoint -->
+    <section id="signages-module-endpoint" class="section">
+      <h2>5. Signages Module Endpoint</h2>
+      <h4>(a) Get Signage Data</h4>
+      <p><strong>Method:</strong> GET<br>
+         <strong>URL:</strong> <code>/api/signages/getSignageData/</code><br>
+         <strong>Description:</strong> Retrieves signage data.</p>
+      <div class="code-block">
+        <button class="copy-btn">Copy</button>
+        <pre><code>curl -X GET "http://127.0.0.1:8000/api/signages/getSignageData/" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"</code></pre>
+      </div>
+    </section>
+  </div>
+
+  <!-- jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <script>
+    // Sidebar toggle handler
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+    // Copy button functionality for code blocks
+    document.querySelectorAll('.copy-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const code = this.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        });
+      });
+    });
+    // Dark mode toggle functionality
+    const toggleBtn = document.getElementById('toggleDarkMode');
+    toggleBtn.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      // Change the dark mode icon:
+      if (document.body.classList.contains('dark-mode')) {
+        toggleBtn.innerHTML = '<i class="fa fa-sun-o"></i>';
+      } else {
+        toggleBtn.innerHTML = '<i class="fa fa-moon-o"></i>';
+      }
+    });
+  </script>
+</body>
+</html>
